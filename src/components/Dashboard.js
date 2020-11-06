@@ -3,7 +3,7 @@ import { Card, Button, Alert, Container, Spinner } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 
-import { db,auth } from "./../firebase";
+import { db, auth } from "./../firebase";
 import { useAuth, AuthContext } from "../contexts/AuthContext";
 import WorkerPanel from "./workerPanel";
 import styles from "./styles.module.css";
@@ -136,21 +136,8 @@ const EmployeeDashboard = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100vh",
-        background: "black",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <img
-        src={`${window.location.origin}/images/logo-black-svg.png`}
-        style={{ width: "250px", marginBottom: "50px" }}
-      />
+    <div className={styles.dashboardContainer}>
+      <img src={`${window.location.origin}/images/logo-black-svg.png`} />
       <Container style={{ background: "black", color: "#fff" }}>
         <div className={styles.mainContainer}>
           <p className={styles.portalStatusText}>
