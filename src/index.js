@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./components/App"
+import App from "./Pages/App";
 import * as serviceWorker from "./service-worker";
 
 import "bootstrap/dist/css/bootstrap.min.css"

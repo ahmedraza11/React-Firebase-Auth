@@ -1,0 +1,44 @@
+.signup_container {
+  width: 100%;
+  height: 100vh;
+  background-color:black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .signup_card {
+    background-color: black;
+    max-width: 400px;
+    width: 400px;
+    .signup_card_header {
+      border:none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        margin-bottom: 30px;
+        width: 210px;
+      }
+    }
+    .form_label {
+      color: #b2afaf;
+    }
+    .signup_btn {
+      width: 100%;
+      border:none;
+      background-color: #4f4f4f;
+      .spinner {
+        margin-left:10px;
+      }
+    }
+    .signup_card_bottom_text {
+      text-align: center;
+      color: #b2afaf;
+      margin-top: 10px;
+      .signup_link_text {
+        font-weight: 600;
+        text-decoration: none;
+        color: #FFF;
+      }
+    } 
+  }
+}

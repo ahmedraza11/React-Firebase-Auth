@@ -1,40 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Card, Button, Alert, Container, Spinner } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 
-import { db, auth } from "./../firebase";
-import { useAuth, AuthContext } from "../contexts/AuthContext";
-import WorkerPanel from "./workerPanel";
-import styles from "./styles.module.css";
-
-const items = [
-  {
-    title: "Chai | Tea",
-    type: "Tea",
-    backgroundColor: "#fd7e14",
-  },
-  {
-    title: "Coffee",
-    type: "Coffee",
-    backgroundColor: "#17a2b8",
-  },
-  {
-    title: "Black Coffee",
-    type: "Black Coffee",
-    backgroundColor: "#dc3545",
-  },
-  {
-    title: "Green tea",
-    type: "Green Tea",
-    backgroundColor: "#009688",
-  },
-  {
-    title: "Come to me",
-    type: "Come to me",
-    backgroundColor: "#607d8b",
-  },
-];
+import { useAuth } from "../../Contexts/AuthContext";
+import { LoaderScreen } from "./../../Components/index";
+import { db, auth } from "./../../firebase";
+import { itemsList, CardItem } from "./utils";
+import styles from "./styles.module.scss";
+import { WorkerPanel } from "./../";
 
 const EmployeeDashboard = () => {
   const [error, setError] = useState("");
@@ -136,9 +110,11 @@ const EmployeeDashboard = () => {
   };
 
   return (
-    <div className={styles.dashboardContainer}>
-      <img src={`${window.location.origin}/images/logo-black-svg.png`} />
-      <Container style={{ background: "black", color: "#fff" }}>
+    <div className={styles.dashboard_container}>
+      <div className={styles.dashboard_header}>
+        <img src={`${window.location.origin}/images/logo-black-svg.png`} />
+      </div>
+      <Container className={styles.dashboard_inner_container}>
         <div className={styles.mainContainer}>
           <p className={styles.portalStatusText}>
             Portal is {appStatus}{" "}
@@ -148,18 +124,17 @@ const EmployeeDashboard = () => {
                   ? styles.onlineCircle
                   : styles.offlineCircle
               }
-            ></div>
+            />
           </p>
           <h3>
             Hi 👋{" "}
             {userObject && userObject.displayName
               ? userObject.displayName
               : "Buddy"}
-            !, What you'd like to have:
+            , What you'd like to have:
           </h3>
-
-          <div className={styles.cardContainer}>
-            {items.map((val, idx) =>
+          <div className={styles.order_cards_container}>
+            {itemsList.map((val, idx) =>
               appStatus == "Online" ? (
                 <CardItem
                   createOrder={createOrder}
@@ -169,23 +144,7 @@ const EmployeeDashboard = () => {
                   clickedItem={clickedItem}
                 />
               ) : (
-                <Card
-                  style={{
-                    width: "18rem",
-                    backgroundColor: "#b2bec3",
-                  }}
-                  className={styles.card}
-                >
-                  <div className={styles.cardBody}>
-                    <h3
-                      className={`${
-                        val.type === clickedItem && styles.h3Styles
-                      }`}
-                    >
-                      {val.title}
-                    </h3>
-                  </div>
-                </Card>
+                <CardItem key={idx} val={val} dumbed />
               )
             )}
           </div>
@@ -209,28 +168,7 @@ const EmployeeDashboard = () => {
   );
 };
 
-const CardItem = ({ val, createOrder, userObject, clickedItem }) => {
-  return (
-    <Card
-      style={{ width: "18rem", backgroundColor: val.backgroundColor }}
-      className={styles.card}
-      onClick={() => createOrder(val.type, userObject.uid)}
-    >
-      <div className={styles.cardBody}>
-        <h3 className={`${val.type === clickedItem && styles.h3Styles}`}>
-          {val.title}
-        </h3>
-        {val.type === clickedItem && (
-          <Spinner animation="grow" variant="light" />
-        )}
-      </div>
-    </Card>
-  );
-};
-
-export default () => {
-  // const { currentUser, loading } = useAuth();
-  // const AuthState = useContext(AuthContext);
+export const Dashboard = () => {
   const [currentUser, setCurrentUser] = useState();
   const [userObject, setUserObject] = useState();
   const [loader, setLoader] = useState(true);
@@ -260,31 +198,8 @@ export default () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("effect", loading);
-  //   if (currentUser) {
-  //     console.log("currrentUserrrrr", currentUser, loading);
-  //     setLoader(false);
-  //   }
-  // }, [currentUser, AuthState]);
-
-  // useEffect(() => {
-  //   console.log("loadingffffff", loading, currentUser);
-  // }, [loading]);
-
   if (loader || !currentUser) {
-    return (
-      <div className={styles.loaderContainer}>
-        <div className={styles.loaderInnerContainer}>
-          <div className={styles.overlay_container}>
-            <img
-              src={`${window.location.origin}/images/logo-black-svg.png`}
-              style={{ width: "300px", marginBottom: "50px" }}
-            />
-          </div>
-        </div>
-      </div>
-    );
+    return <LoaderScreen />;
   } else {
     return currentUser?.role == "employee" ? (
       <EmployeeDashboard />

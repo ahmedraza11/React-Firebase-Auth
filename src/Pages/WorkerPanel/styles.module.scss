@@ -1,0 +1,138 @@
+.workPanel_container {
+  margin-bottom: 50px;
+  header {
+    border-bottom: solid 1px #4f4f4f;
+    display: flex;
+    margin-top: 50px;
+    justify-content: space-between;
+    padding-bottom: 13px;
+    img {
+      width: 163px;
+      height: 19px;
+    }
+    .workerPanelHeaderBtnContainer {
+      display: flex;
+      .workerPanelHeaderBtnContainerLogoutBtn {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background: #e17055;
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        border-radius: 5px;
+        margin-right: 15px;
+      }
+    }
+    .appOnlineStatusBtn {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #4f4f4f;
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      border-radius: 5px;
+      div {
+        width: 12px;
+        height: 12px;
+        background: #55efc4;
+        border-radius: 50px;
+        margin-left: 15px;
+      }
+    }
+    .appOffileStatusBtn {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #ff7675;
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      border-radius: 5px;
+      div {
+        width: 12px;
+        height: 12px;
+        background: #b2bec3;
+        border-radius: 50px;
+        margin-left: 15px;
+      }
+    }
+  }
+  .orderRowsContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .orderListContainer {
+      padding-top: 40px;
+      max-width: 300px;
+      & > div {
+        padding-top: 20px;
+        overflow-x: auto;
+        max-height: 450px;
+      }
+      h5 {
+        margin-bottom: 25px;
+        padding-bottom: 5px;
+        border-bottom: solid 0.5px #4f4f4f;
+      }
+      .order_card_container {
+        display: flex;
+
+        .orderRow_btnContainer {
+          margin-left: 15px;
+          > button {
+            margin-bottom: 15px;
+          }
+          .orderRowBtn {
+            background: #4f4f4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px;
+            width: 85px;
+          }
+        }
+        .order_card {
+          width: 200px;
+          padding: 10px;
+          background: #81ecec;
+          margin-bottom: 18px;
+          cursor: pointer;
+          p {
+            margin: auto;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            font-weight: 600;
+          }
+          .client_name {
+            font-size: 12px;
+            position: absolute;
+            top: -13px;
+            left: 45px;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+          }
+          .order_time {
+            font-size: 8px;
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+          }
+        }
+      }
+      .no_orderMsg {
+        font-size: 22px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+}
