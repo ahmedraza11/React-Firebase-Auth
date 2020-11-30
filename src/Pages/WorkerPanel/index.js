@@ -63,11 +63,11 @@ export const WorkerPanel = () => {
   }
 
   useEffect(() => {
-    getAppStatus();
-    getAllOrders();
+    let unSub = getAppStatus();
+    let unSubGetAllOrders = getAllOrders();
     return () => {
-      getAppStatus();
-      getAllOrders();
+      unSub();
+      unSubGetAllOrders();
     };
   }, []);
 

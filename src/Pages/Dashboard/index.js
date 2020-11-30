@@ -14,8 +14,10 @@ const EmployeeDashboard = () => {
   const [error, setError] = useState("");
   const [appStatus, setAppStatus] = useState("Offline");
   const [clickedItem, setClickedItem] = useState("");
+  const [currentUserOrders, setCurrentUserOrders] = useState([]);
   const { userObject, logout } = useAuth();
   const history = useHistory();
+  console.log("currentUserOrders", currentUserOrders);
 
   async function handleLogout() {
     setError("");
@@ -29,7 +31,8 @@ const EmployeeDashboard = () => {
 
   const getAppStatus = () => {
     try {
-      db.collection("app")
+      return db
+        .collection("app")
         .doc("mikaels_panda")
         .onSnapshot(function (doc) {
           setAppStatus(doc.data().status);
@@ -37,8 +40,31 @@ const EmployeeDashboard = () => {
     } catch (err) {}
   };
 
+  console.log("userObject?.uid", userObject?.uid);
+  const getCurrentUserOrders = () => {
+    try {
+      return db
+        .collection("orders")
+        .where("order_by", "==", userObject?.uid)
+        .onSnapshot(function (docs) {
+          let data = [];
+          docs.forEach((val) => {
+            if (val.data().status !== "completed") {
+              data.push(val.data());
+            }
+          });
+          setCurrentUserOrders(data);
+        });
+    } catch (err) {}
+  };
+
   useEffect(() => {
-    getAppStatus();
+    let unSub = getAppStatus();
+    let unSubGetUserOrders = getCurrentUserOrders();
+    return () => {
+      unSub();
+      unSubGetUserOrders();
+    };
   }, []);
 
   const createOrder = async (type, uid) => {
@@ -61,31 +87,42 @@ const EmployeeDashboard = () => {
                   data.push(val.data());
                 });
                 if (verified) {
-                  if (data.length < 2) {
-                    setClickedItem(type);
-                    db.collection("orders")
-                      .add({
-                        type: type,
-                        createdAt: new Date(),
-                        order_by: uid,
-                        username: userObject.displayName,
-                        status: "pending",
-                      })
-                      .then(() => {
+                  swal(
+                    "Are you sure you want to place order for " + type + "?",
+                    {
+                      buttons: ["No", "Yes"],
+                    }
+                  ).then((val) => {
+                    if (val) {
+                      if (data.length < 2) {
+                        setClickedItem(type);
+                        db.collection("orders")
+                          .add({
+                            type: type,
+                            createdAt: new Date(),
+                            order_by: uid,
+                            username: userObject.displayName,
+                            status: "pending",
+                          })
+                          .then(() => {
+                            setClickedItem("");
+                            swal("Order Successfully created!", "", "success");
+                          })
+                          .catch((err) => {
+                            setClickedItem("");
+                            alert("Error Error!", err);
+                          });
+                      } else {
+                        swal(
+                          "Order Limit Exeption ♨️",
+                          "Your orders are > than 3, await till your orders resolved 🤪"
+                        );
                         setClickedItem("");
-                        swal("Order Successfully created!", "", "success");
-                      })
-                      .catch((err) => {
-                        setClickedItem("");
-                        alert("Error Error!", err);
-                      });
-                  } else {
-                    swal(
-                      "Order Limit Exeption ♨️",
-                      "Your orders are > than 3, await till your orders resolved 🤪"
-                    );
-                    setClickedItem("");
-                  }
+                      }
+                    } else {
+                      setClickedItem("");
+                    }
+                  });
                 } else {
                   swal(
                     "Sorry! You are not verified user!",
@@ -111,6 +148,7 @@ const EmployeeDashboard = () => {
 
   return (
     <div className={styles.dashboard_container}>
+      {/* <OrderStatus orders={currentUserOrders} /> */}
       <div className={styles.dashboard_header}>
         <img src={`${window.location.origin}/images/logo-black-svg.png`} />
       </div>
@@ -207,4 +245,19 @@ export const Dashboard = () => {
       <WorkerPanel />
     );
   }
+};
+
+const OrderStatus = ({ orders }) => {
+  return (
+    <div>
+      Your orders
+      {orders.map((val) => (
+        <div>
+          <p>
+            {val.type} | {val.status}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
 };
