@@ -24,4 +24,5 @@ export const itemsList = [
     type: "Come to me",
     backgroundColor: "#607d8b",
   },
+  { title: "Custom", type: "Custom", backgroundColor: "#7a8b60" },
 ];
