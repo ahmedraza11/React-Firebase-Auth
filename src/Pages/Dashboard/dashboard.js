@@ -91,6 +91,7 @@ export const EmployeeDashboard = () => {
                             });
                         } else {
                           swal("Under construction 🛠️", "...");
+                          setClickedItem("");
                         }
                       } else {
                         swal(
